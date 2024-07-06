@@ -9,6 +9,9 @@ const port = 4000;
 
 app.use(bodyParser.json());
 
+// Import and use the cart routes
+const Routes = require('./routes');
+app.use('/api', Routes);
 
 // MongoDB connection
 mongoose.connect('mongodb+srv://rup:rup123@webtechnologies.dadlfxy.mongodb.net/?retryWrites=true&w=majority&appName=WebTechnologies').then(() => {
