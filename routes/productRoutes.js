@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/product/createProduct', auth, async (req, res) => {
+router.post('/createProduct', auth, async (req, res) => {
     const product = new Product({
         ...req.body
     });
@@ -19,7 +19,7 @@ router.post('/product/createProduct', auth, async (req, res) => {
     }
 });
 
-router.get("/product/getAllProducts", async (req, res) => {
+router.get("/getAllProducts", async (req, res) => {
     try {
         const products = await Product.find();
         res.json(products);

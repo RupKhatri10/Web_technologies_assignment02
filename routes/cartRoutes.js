@@ -1,7 +1,6 @@
 const express = require('express');
-const cartController = require('../controllers/cartController');
 const auth = require('../middleware/auth');
-const Cart = require('../models/cartSchema');
+const Cart = require('../models/Cart');
 
 // cartRoutes.js
 
