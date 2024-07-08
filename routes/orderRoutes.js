@@ -1,6 +1,7 @@
 const express = require('express');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
+const Product = require('../models/Product');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
@@ -13,10 +14,30 @@ router.post('/createOrder', auth, async (req, res) => {
         if (!cart) {
             return res.status(404).json({ error: 'Cart not found' });
         }
-        const order = new Order({ ...req.body, user: _id, products: cart.products });
+
+        // calculate total price
+        let total = 0;
+        
+        for (let i = 0; i < cart.products.length; i++) {
+            const product = cart.products[i];
+            let shippingCost = 0;
+            const productDetail = await Product.findById(product.product);
+            if (productDetail) {
+                shippingCost = productDetail.shippingCost;
+                total += productDetail.pricing * product.quantity;
+                total += shippingCost;
+            }
+        }
+
+        const order = new Order({ ...req.body, user: _id, products: cart.products, total });
         await order.save();
+
+        // Clear the user's cart
+        await Cart.findOneAndDelete({ user: _id });
+
         res.status(201).json(order);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: 'Failed to create order' });
     }
 });

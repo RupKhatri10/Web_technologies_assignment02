@@ -19,7 +19,7 @@ router.post('/createComment', auth, async (req, res) => {
 
         await comment.save();
 
-        res.status(201).json({ message: 'Comment created successfully' });
+        res.status(201).json({ message: 'Comment created successfully', comment });
     } catch (error) {
         res.status(500).json({ error: 'Failed to create comment' });
     }
@@ -49,10 +49,15 @@ router.delete('/:id', auth, async (req, res) => {
             return res.status(404).json({ error: 'Comment not found' });
         }
 
-        await comment.remove();
+        if (comment.user.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ error: 'You are not authorized to delete this comment' });
+        }
+
+        await comment.deleteOne({_id: commentId});
 
         res.status(200).json({ message: 'Comment deleted successfully' });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: 'Failed to delete comment' });
     }
 });
