@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/createOrder', auth, async (req, res) => {
     try {
         const { _id } = req.user; // Accessing req.user._id from the auth middleware
-        // Create a new order using the req.body and the user's _id
+        // Creating a new order using the req.body and the user's _id
         const cart = await Cart.findOne({ user: _id });
         if (!cart) {
             return res.status(404).json({ error: 'Cart not found' });
@@ -44,9 +44,9 @@ router.post('/createOrder', auth, async (req, res) => {
 
 router.get('/:orderId', auth, async (req, res) => {
     try {
-        const { _id } = req.user; // Accessing req.user._id from the auth middleware
+        const { _id } = req.user; 
         const orderId = req.params.orderId;
-        // Find the order with the provided orderId and the user's _id
+        
         const order = await Order.findOne({ _id: orderId, user: _id });
         if (!order) {
             return res.status(404).json({ error: 'Order not found' });
@@ -59,9 +59,9 @@ router.get('/:orderId', auth, async (req, res) => {
 
 router.put('/:updateByOrderId', auth, async (req, res) => {
     try {
-        const { _id } = req.user; // Accessing req.user._id from the auth middleware
+        const { _id } = req.user; 
         const orderId = req.params.updateByOrderId;
-        // Find and update the order with the provided orderId and the user's _id
+        
         const order = await Order.findOneAndUpdate(
             { _id: orderId, user: _id },
             req.body,

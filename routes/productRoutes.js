@@ -4,6 +4,7 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
+// Create a new product
 router.post('/createProduct', auth, async (req, res) => {
     const product = new Product({
         ...req.body
@@ -19,6 +20,7 @@ router.post('/createProduct', auth, async (req, res) => {
     }
 });
 
+// Get all products
 router.get("/getAllProducts", async (req, res) => {
     try {
         const products = await Product.find();
@@ -28,6 +30,7 @@ router.get("/getAllProducts", async (req, res) => {
     }
 });
 
+// Get a product by its ID
 router.get('/:findById', async (req, res) => {
     try {
         const product = await Product.findById(req.params.findById);
@@ -40,6 +43,7 @@ router.get('/:findById', async (req, res) => {
     }
 });
 
+// Update a product by its ID
 router.put('/:updateById', auth, async (req, res) => {
     try {
         const product = await Product.findByIdAndUpdate(req.params.updateById, req.body, { new: true });
@@ -52,6 +56,7 @@ router.put('/:updateById', auth, async (req, res) => {
     }
 });
 
+// Delete a product by its ID
 router.delete('/:deleteById', auth, async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.deleteById);
